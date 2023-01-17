@@ -1,0 +1,22 @@
+server:
+  port: 8083
+spring:
+  datasource:
+    username: postgres
+    password: admin
+    url: jdbc:postgresql://localhost:5432/db_users
+  h2:
+    console:
+      enabled: true
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      show-sql: true
+      ddl-auto: none
+  liquibase:
+    enabled: true
+
+users:
+  uri: http://jsonplaceholder.typicode.com/users
