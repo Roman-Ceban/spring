@@ -65,6 +65,14 @@ public class Address {
         return zipcode;
     }
 
+    public String getLat() {
+        return "lat";
+    }
+
+    public String getLong() {
+        return "long";
+    }
+
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
