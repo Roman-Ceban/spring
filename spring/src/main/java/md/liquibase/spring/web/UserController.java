@@ -1,11 +1,7 @@
 package md.liquibase.spring.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.opencsv.CSVWriter;
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import md.liquibase.spring.configuration.AppProperties;
-import md.liquibase.spring.dto.UserExportDTO;
 import md.liquibase.spring.exportCsv.UserExcelExporter;
 import md.liquibase.spring.model.Users;
 import md.liquibase.spring.repository.UserRepository;
@@ -14,7 +10,6 @@ import md.liquibase.spring.service.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +23,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     Logger log = LoggerFactory.getLogger(UserController.class);
     private final UsersService userService;
@@ -80,17 +78,15 @@ public class UserController {
     }
 
     @GetMapping("/export-all-users")
-    public void exportAllUsers(HttpServletResponse response) throws IOException {
-        response.setContentType("application/octet-stream");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
-        response.setHeader(headerKey, headerValue);
-
+    public ResponseEntity<byte[]> exportAllUsers() throws IOException {
+        String currentDateTime= new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
         UserExcelExporter excelExporter = new UserExcelExporter(userExportService.getUsers());
-        excelExporter.export(response);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(CONTENT_TYPE, "application/octet-stream");
+        headers.add(CONTENT_DISPOSITION, "attachment; filename=users_" + currentDateTime + ".xlsx");
+
+        return ResponseEntity.ok().headers(headers).body(excelExporter.export());
     }
 
     @PutMapping

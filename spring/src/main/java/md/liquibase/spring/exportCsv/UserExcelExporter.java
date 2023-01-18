@@ -1,6 +1,5 @@
 package md.liquibase.spring.exportCsv;
 
-
 import md.liquibase.spring.dto.UserExportDTO;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -8,23 +7,20 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
 public class UserExcelExporter {
-    private XSSFWorkbook workbook;
     private XSSFSheet sheet;
     private List<UserExportDTO> userExportDTOList;
 
     public UserExcelExporter(List<UserExportDTO> userExportDTOList) {
         this.userExportDTOList = userExportDTOList;
-        workbook = new XSSFWorkbook();
+
     }
 
-    private void writeHeaderLine() {
+    private void writeHeaderLine(XSSFWorkbook  workbook) {
         sheet = workbook.createSheet("Users");
 
         Row row = sheet.createRow(0);
@@ -62,18 +58,15 @@ public class UserExcelExporter {
         cell.setCellStyle(style);
     }
 
-    private void writeDataLines() {
+    private void writeDataLines(XSSFWorkbook  workbook) {
         int rowCount = 1;
-
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
         font.setFontHeight(14);
         style.setFont(font);
-
         for (UserExportDTO user : userExportDTOList) {
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
-
             createCell(row, columnCount++, user.getName(), style);
             createCell(row, columnCount++, user.getUsername(), style);
             createCell(row, columnCount++, user.getEmail(), style);
@@ -87,12 +80,12 @@ public class UserExcelExporter {
         }
     }
 
-    public void export(HttpServletResponse response) throws IOException {
-        writeHeaderLine();
-        writeDataLines();
-        ServletOutputStream outputStream = response.getOutputStream();
-        workbook.write(outputStream);
-        workbook.close();
-        outputStream.close();
+    public byte[] export() throws IOException {
+        try(XSSFWorkbook  workbook = new XSSFWorkbook(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            writeHeaderLine(workbook);
+            writeDataLines(workbook);
+            workbook.write(outputStream);
+            return outputStream.toByteArray();
+        }
     }
 }
