@@ -1,4 +1,4 @@
-package md.liquibase.spring.exportCsv;
+package md.liquibase.spring.exportExcel;
 
 import md.liquibase.spring.dto.UserExportDTO;
 import org.apache.poi.ss.usermodel.Cell;

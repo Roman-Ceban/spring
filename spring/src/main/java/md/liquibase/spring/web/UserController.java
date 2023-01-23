@@ -1,8 +1,15 @@
 package md.liquibase.spring.web;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import io.swagger.annotations.ApiImplicitParam;
 import md.liquibase.spring.configuration.AppProperties;
-import md.liquibase.spring.exportCsv.UserExcelExporter;
+import md.liquibase.spring.configuration.csvProperties;
+import md.liquibase.spring.dto.UserExportDTO;
+import md.liquibase.spring.exportCSV.UserCsvExporter;
+import md.liquibase.spring.exportCSV.UserCsvMappingStrategy;
+import md.liquibase.spring.exportExcel.UserExcelExporter;
 import md.liquibase.spring.model.Users;
 import md.liquibase.spring.repository.UserRepository;
 import md.liquibase.spring.service.UserExportService;
@@ -10,6 +17,8 @@ import md.liquibase.spring.service.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +27,9 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
@@ -35,17 +42,21 @@ public class UserController {
     private final UserRepository userRepository;
     private final AppProperties appProperties;
     private final UserExportService userExportService;
+    private final UserCsvExporter userCsvExporter;
+
 
     public UserController(ObjectMapper objectMapper,
                           UserRepository userRepository,
                           UsersService userService,
                           AppProperties appProperties,
-                          UserExportService userExportService) {
+                          UserExportService userExportService,
+                           UserCsvExporter userCsvExporter) {
         this.objectMapper = objectMapper;
         this.userRepository = userRepository;
         this.userService = userService;
         this.appProperties = appProperties;
         this.userExportService = userExportService;
+        this.userCsvExporter = userCsvExporter;
     }
 
     private ResponseEntity<Void> getUser() {
@@ -81,7 +92,6 @@ public class UserController {
     public ResponseEntity<byte[]> exportAllUsers() throws IOException {
         String currentDateTime= new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
         UserExcelExporter excelExporter = new UserExcelExporter(userExportService.getUsers());
-
         HttpHeaders headers = new HttpHeaders();
         headers.add(CONTENT_TYPE, "application/octet-stream");
         headers.add(CONTENT_DISPOSITION, "attachment; filename=users_" + currentDateTime + ".xlsx");
@@ -89,7 +99,21 @@ public class UserController {
         return ResponseEntity.ok().headers(headers).body(excelExporter.export());
     }
 
+    @GetMapping("/export-csv")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token",
+            required = true,
+            paramType = "header")
+    public void exportCSV(HttpServletResponse response) throws Exception {
+        String currentDateTime= new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
+        var fileName = "users_" + currentDateTime + ".csv";
+        response.setContentType("text/csv");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=" + fileName);
+        userCsvExporter.export(response.getWriter());
+    }
+
     @PutMapping
+
     public ResponseEntity<String> updateUser(@RequestBody Users user) {
         if (userRepository.existsById(user.getId())) {
             userRepository.save(user);

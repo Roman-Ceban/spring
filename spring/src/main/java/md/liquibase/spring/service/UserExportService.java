@@ -15,7 +15,6 @@ public class UserExportService {
         this.usersRepository = usersRepository;
     }
 
-
     public List<UserExportDTO> getUsers() {
         List<UserExportDTO> userExportDTOList = new ArrayList<>();
 
