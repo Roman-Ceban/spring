@@ -1,14 +1,9 @@
 package md.liquibase.spring.web;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.opencsv.CSVWriter;
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import io.swagger.annotations.ApiImplicitParam;
 import md.liquibase.spring.configuration.AppProperties;
-import md.liquibase.spring.configuration.csvProperties;
-import md.liquibase.spring.dto.UserExportDTO;
 import md.liquibase.spring.exportCSV.UserCsvExporter;
-import md.liquibase.spring.exportCSV.UserCsvMappingStrategy;
 import md.liquibase.spring.exportExcel.UserExcelExporter;
 import md.liquibase.spring.model.Users;
 import md.liquibase.spring.repository.UserRepository;
@@ -17,19 +12,22 @@ import md.liquibase.spring.service.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
+
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
@@ -50,13 +48,14 @@ public class UserController {
                           UsersService userService,
                           AppProperties appProperties,
                           UserExportService userExportService,
-                           UserCsvExporter userCsvExporter) {
+                          UserCsvExporter userCsvExporter) {
         this.objectMapper = objectMapper;
         this.userRepository = userRepository;
         this.userService = userService;
         this.appProperties = appProperties;
         this.userExportService = userExportService;
         this.userCsvExporter = userCsvExporter;
+
     }
 
     private ResponseEntity<Void> getUser() {
@@ -111,7 +110,27 @@ public class UserController {
                 "attachment; filename=" + fileName);
         userCsvExporter.export(response.getWriter());
     }
-
+    @PostMapping("/import-csv")
+    public ResponseEntity<Void> addClassifierListFromCsv(@RequestParam("file") MultipartFile file) {
+//        Path path = Paths.get("C:\\Users\\User\\Downloads\\spring\\users.csv");
+//        String name = "users.csv";
+//        String originalFileName = "users.csv";
+//        String contentType = "text/csv";
+//        byte[] content = null;
+//        try {
+//            content = Files.readAllBytes(path);
+//        } catch (final IOException e) {
+//        }
+//        MultipartFile file = new MockMultipartFile(name,
+//                originalFileName, contentType, content);
+        log.debug("REST request to create a Custom Classifier list");
+        if (file.isEmpty()){
+            return ResponseEntity.badRequest().body(null);
+        }else {
+            usersService.createCustomUser(file);
+            return ResponseEntity.ok().body(null);
+        }
+    }
     @PutMapping
 
     public ResponseEntity<String> updateUser(@RequestBody Users user) {

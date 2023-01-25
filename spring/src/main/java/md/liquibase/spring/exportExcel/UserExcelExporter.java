@@ -74,8 +74,8 @@ public class UserExcelExporter {
             createCell(row, columnCount++, user.getSuite(), style);
             createCell(row, columnCount++, user.getCity(), style);
             createCell(row, columnCount++, user.getZipcode(), style);
-            createCell(row, columnCount++, user.getLat().toString(), style);
-            createCell(row, columnCount++, user.getLng().toString(), style);
+            createCell(row, columnCount++, user.getLat(), style);
+            createCell(row, columnCount++, user.getLng(), style);
             createCell(row, columnCount++, user.getWebsite(), style);
         }
     }
