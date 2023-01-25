@@ -22,6 +22,7 @@ public class Geo {
     public Geo() {
     }
 
+
     public Double getLat() {
         return lat;
     }

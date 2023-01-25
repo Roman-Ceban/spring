@@ -13,7 +13,8 @@ public class Address {
     private String suite;
     private String city;
     private String zipcode;
-    @OneToOne(cascade = CascadeType.ALL)// ca sa adauge in tabele "copil" la salvare
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "geo_id", referencedColumnName = "id")
     private Geo geo;
 
@@ -25,16 +26,13 @@ public class Address {
         this.zipcode = zipcode;
         this.geo = geo;
     }
-
-    public Address(String street, String suite, String city, String zipcode, Geo geo) {
+    public Address() {
+    }
+    public Address( String street, String suite, String city, String zipcode) {
         this.street = street;
         this.suite = suite;
         this.city = city;
         this.zipcode = zipcode;
-        this.geo = geo;
-    }
-
-    public Address() {
     }
 
     public String getStreet() {
@@ -63,6 +61,14 @@ public class Address {
 
     public String getZipcode() {
         return zipcode;
+    }
+
+    public String getLat() {
+        return "lat";
+    }
+
+    public String getLong() {
+        return "lng";
     }
 
     public void setZipcode(String zipcode) {
