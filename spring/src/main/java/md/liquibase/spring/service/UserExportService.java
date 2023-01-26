@@ -27,8 +27,8 @@ public class UserExportService {
                         user.getAddress().getSuite(),
                         user.getAddress().getCity(),
                         user.getAddress().getZipcode(),
-                        user.getAddress().getLat(),
-                        user.getAddress().getLong(),
+                        user.getAddress().getLat().toString(),
+                        user.getAddress().getLong().toString(),
                         user.getPhone(),
                         user.getWebsite()
                 )));

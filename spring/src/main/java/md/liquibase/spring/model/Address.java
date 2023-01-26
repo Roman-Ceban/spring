@@ -63,12 +63,12 @@ public class Address {
         return zipcode;
     }
 
-    public String getLat() {
-        return "lat";
+    public Double getLat() {
+        return geo.getLat();
     }
 
-    public String getLong() {
-        return "lng";
+    public Double getLong() {
+        return geo.getLng();
     }
 
     public void setZipcode(String zipcode) {

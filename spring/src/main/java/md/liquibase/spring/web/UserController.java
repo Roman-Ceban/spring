@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +43,6 @@ public class UserController {
     private final AppProperties appProperties;
     private final UserExportService userExportService;
     private final UserCsvExporter userCsvExporter;
-
 
     public UserController(ObjectMapper objectMapper,
                           UserRepository userRepository,
@@ -82,7 +83,6 @@ public class UserController {
         log.debug("GET request all users.");
         List<Users> users = new ArrayList<>();
         userRepository.findAll().forEach(users::add);
-        UserExcelExporter excelExporter = new UserExcelExporter(userExportService.getUsers());
         return users;
 
     }
@@ -112,7 +112,7 @@ public class UserController {
     }
     @PostMapping("/import-csv")
     public ResponseEntity<Void> addClassifierListFromCsv(@RequestParam("file") MultipartFile file) {
-//        Path path = Paths.get("C:\\Users\\User\\Downloads\\spring\\users.csv");
+      Path path = Paths.get("C:\\Users\\User\\Downloads\\spring\\users.csv");
 //        String name = "users.csv";
 //        String originalFileName = "users.csv";
 //        String contentType = "text/csv";
@@ -132,7 +132,6 @@ public class UserController {
         }
     }
     @PutMapping
-
     public ResponseEntity<String> updateUser(@RequestBody Users user) {
         if (userRepository.existsById(user.getId())) {
             userRepository.save(user);
