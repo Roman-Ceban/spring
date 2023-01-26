@@ -109,7 +109,7 @@ public class UserController {
         userCsvExporter.export(response.getWriter());
     }
     @PostMapping("/import-csv")
-    public ResponseEntity<Void> addClassifierListFromCsv(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> addClassifierListFromCsv(@RequestParam("file") MultipartFile file) {
 //        Path path = Paths.get("C:\\Users\\User\\Downloads\\spring\\users.csv");
 //        String name = "users.csv";
 //        String originalFileName = "users.csv";
@@ -125,8 +125,8 @@ public class UserController {
         if (file.isEmpty()){
             return ResponseEntity.badRequest().body(null);
         }else {
-            usersService.createCustomUser(file);
-            return ResponseEntity.ok().body(null);
+            userRepository.saveAll(usersService.getUsersFromCsvFile(file));
+            return ResponseEntity.ok().body("imported");
         }
     }
     @PutMapping

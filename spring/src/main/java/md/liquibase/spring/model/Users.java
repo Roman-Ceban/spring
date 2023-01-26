@@ -36,12 +36,11 @@ public class Users {
     public Users() {
     }
 
-    public Users(String s, String s1, String s2, String s3, String s4) {
+    public Users(String s, String s1, String s2) {
         this.name = s;
         this.username = s1;
         this.email = s2;
-        this.phone = s3;
-        this.website = s4;
+
     }
 
     public Integer getId() {

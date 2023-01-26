@@ -18,6 +18,7 @@ public class Address {
     @JoinColumn(name = "geo_id", referencedColumnName = "id")
     private Geo geo;
 
+
     public Address(Long id, String street, String suite, String city, String zipcode, Geo geo) {
         this.id = id;
         this.street = street;
@@ -26,13 +27,16 @@ public class Address {
         this.zipcode = zipcode;
         this.geo = geo;
     }
-    public Address() {
-    }
-    public Address( String street, String suite, String city, String zipcode) {
+
+    public Address(String street, String suite, String city, String zipcode, Geo geo) {
         this.street = street;
         this.suite = suite;
         this.city = city;
         this.zipcode = zipcode;
+        this.geo = geo;
+    }
+
+    public Address() {
     }
 
     public String getStreet() {
@@ -61,14 +65,6 @@ public class Address {
 
     public String getZipcode() {
         return zipcode;
-    }
-
-    public Double getLat() {
-        return geo.getLat();
-    }
-
-    public Double getLong() {
-        return geo.getLng();
     }
 
     public void setZipcode(String zipcode) {
