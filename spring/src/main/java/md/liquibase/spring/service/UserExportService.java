@@ -30,7 +30,10 @@ public class UserExportService {
                         user.getAddress().getLat().toString(),
                         user.getAddress().getLong().toString(),
                         user.getPhone(),
-                        user.getWebsite()
+                        user.getWebsite(),
+                        user.getCompany().getName(),
+                        user.getCompany().getBs(),
+                        user.getCompany().getCatchPhrase()
                 )));
         return userExportDTOList;
     }

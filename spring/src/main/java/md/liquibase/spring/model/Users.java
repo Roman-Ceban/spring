@@ -21,6 +21,7 @@ public class Users {
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     private Company company;
 
+
     public Users(String name, String username, String email, Address address, String phone, String website,
                  Company company) {
         this.name = name;

@@ -21,8 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +57,8 @@ public class UserController {
 
     }
 
-    private ResponseEntity<Void> getUser() {
+    @GetMapping("/populate")
+    private ResponseEntity<Void> getUsers() {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Object[]> response = restTemplate.getForEntity(appProperties.getUri(), Object[].class);
         List<Users> users = Arrays.stream(response.getBody())
@@ -78,12 +77,11 @@ public class UserController {
         return new ResponseEntity<>(userRepository.save(user), HttpStatus.CREATED);
     }
 
+
     @GetMapping
     public List<Users> getAllUsers() {
         log.debug("GET request all users.");
-        List<Users> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
-        return users;
+        return userRepository.findAll();
 
     }
 
@@ -112,7 +110,7 @@ public class UserController {
     }
     @PostMapping("/import-csv")
     public ResponseEntity<Void> addClassifierListFromCsv(@RequestParam("file") MultipartFile file) {
-      Path path = Paths.get("C:\\Users\\User\\Downloads\\spring\\users.csv");
+//        Path path = Paths.get("C:\\Users\\User\\Downloads\\spring\\users.csv");
 //        String name = "users.csv";
 //        String originalFileName = "users.csv";
 //        String contentType = "text/csv";
@@ -132,6 +130,7 @@ public class UserController {
         }
     }
     @PutMapping
+
     public ResponseEntity<String> updateUser(@RequestBody Users user) {
         if (userRepository.existsById(user.getId())) {
             userRepository.save(user);
