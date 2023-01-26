@@ -7,6 +7,5 @@ databaseChangeLog:
       file: db/changelog/company.xml
   - include:
       file: db/changelog/geo.xml
-  - include:
-      file: db/changelog/contacts.xml
+
 

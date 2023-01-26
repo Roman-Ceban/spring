@@ -7,6 +7,7 @@ import md.liquibase.spring.model.Address;
 import md.liquibase.spring.model.Geo;
 import md.liquibase.spring.model.Users;
 import md.liquibase.spring.repository.AddressRepository;
+import md.liquibase.spring.repository.ContactRepository;
 import md.liquibase.spring.repository.GeoRepository;
 import md.liquibase.spring.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,13 @@ public class UsersService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final GeoRepository geoRepository;
+    private  final ContactRepository contactRepository;
 
-    public UsersService(UserRepository userRepository, AddressRepository addressRepository, GeoRepository geoRepository) {
+    public UsersService(UserRepository userRepository, AddressRepository addressRepository, GeoRepository geoRepository, ContactRepository contactRepository) {
         this.userRepository = userRepository;
         this.addressRepository = addressRepository;
         this.geoRepository = geoRepository;
+        this.contactRepository = contactRepository;
     }
 
     public Users findById(Integer id) {

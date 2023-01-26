@@ -1,9 +1,10 @@
 package md.liquibase.spring.model;
 
 import javax.persistence.*;
+
 @Entity
 @Table(name = "users", schema = "public")
-public class Users  {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -20,8 +21,8 @@ public class Users  {
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     private Company company;
 
-
-    public Users(String name, String username, String email, Address address, String phone, String website, Company company) {
+    public Users(String name, String username, String email, Address address, String phone, String website,
+                 Company company) {
         this.name = name;
         this.username = username;
         this.email = email;
@@ -41,8 +42,6 @@ public class Users  {
         this.phone = s3;
         this.website = s4;
     }
-
-
 
     public Integer getId() {
         return id;
@@ -107,7 +106,6 @@ public class Users  {
     public void setCompany(Company company) {
         this.company = company;
     }
-
 
 
 }

@@ -26,7 +26,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="geo_id" type="int">
-                <constraints nullable="true" foreignKeyName="factory_key" />
+                <constraints nullable="false" foreignKeyName="users_geo_id_fk"/>
             </column>
 
         </createTable>

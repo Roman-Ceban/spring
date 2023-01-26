@@ -1,15 +1,18 @@
 package md.liquibase.spring.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "contacts", schema = "public")
 public class Contacts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long phone;
     private String website;
+
+    public Contacts() {
+    }
 
     public Contacts(Long id, Long phone, String website) {
         this.id = id;
