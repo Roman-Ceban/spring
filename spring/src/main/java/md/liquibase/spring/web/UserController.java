@@ -66,8 +66,6 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-
-
     @PostMapping
     public ResponseEntity<Users> addUser(@RequestBody Users user) {
         return new ResponseEntity<>(userRepository.save(user), HttpStatus.CREATED);
