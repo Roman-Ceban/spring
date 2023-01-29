@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +34,6 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 @RequestMapping("/users")
 public class UserController {
     Logger log = LoggerFactory.getLogger(UserController.class);
-    private final UsersService userService;
     private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
     private final AppProperties appProperties;
@@ -50,7 +48,6 @@ public class UserController {
                           UserCsvExporter userCsvExporter) {
         this.objectMapper = objectMapper;
         this.userRepository = userRepository;
-        this.userService = userService;
         this.appProperties = appProperties;
         this.userExportService = userExportService;
         this.userCsvExporter = userCsvExporter;
@@ -69,8 +66,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @Autowired
-    UsersService usersService;
+
 
     @PostMapping
     public ResponseEntity<Users> addUser(@RequestBody Users user) {
@@ -108,19 +104,10 @@ public class UserController {
                 "attachment; filename=" + fileName);
         userCsvExporter.export(response.getWriter());
     }
+    @Autowired
+    UsersService usersService;
     @PostMapping("/import-csv")
     public ResponseEntity<String> addClassifierListFromCsv(@RequestParam("file") MultipartFile file) {
-//        Path path = Paths.get("C:\\Users\\User\\Downloads\\spring\\users.csv");
-//        String name = "users.csv";
-//        String originalFileName = "users.csv";
-//        String contentType = "text/csv";
-//        byte[] content = null;
-//        try {
-//            content = Files.readAllBytes(path);
-//        } catch (final IOException e) {
-//        }
-//        MultipartFile file = new MockMultipartFile(name,
-//                originalFileName, contentType, content);
         log.debug("REST request to create a Custom Classifier list");
         if (file.isEmpty()){
             return ResponseEntity.badRequest().body(null);

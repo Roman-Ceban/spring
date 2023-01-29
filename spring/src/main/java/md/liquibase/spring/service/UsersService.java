@@ -80,8 +80,6 @@ public class UsersService {
                     );
                     users.add(toAdd);
 
-
-
 //                    Geo savedGeo = geoRepository.save(geo);
 //                    address.setGeo(savedGeo);
 //                    Address savadAddress = addressRepository.save(address);
