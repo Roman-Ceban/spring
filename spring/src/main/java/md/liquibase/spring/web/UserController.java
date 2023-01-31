@@ -51,7 +51,6 @@ public class UserController {
         this.appProperties = appProperties;
         this.userExportService = userExportService;
         this.userCsvExporter = userCsvExporter;
-
     }
 
     @GetMapping("/populate")
@@ -66,13 +65,10 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-
-
     @PostMapping
     public ResponseEntity<Users> addUser(@RequestBody Users user) {
         return new ResponseEntity<>(userRepository.save(user), HttpStatus.CREATED);
     }
-
 
     @GetMapping
     public List<Users> getAllUsers() {
@@ -83,13 +79,13 @@ public class UserController {
 
     @GetMapping("/export-all-users")
     public ResponseEntity<byte[]> exportAllUsers() throws IOException {
-        String currentDateTime= new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
-        UserExcelExporter excelExporter = new UserExcelExporter(userExportService.getUsers());
+        String currentDateTime = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
+        UserExcelExporter userExcelExporter = new UserExcelExporter(userExportService.getUsers());
         HttpHeaders headers = new HttpHeaders();
         headers.add(CONTENT_TYPE, "application/octet-stream");
-        headers.add(CONTENT_DISPOSITION, "attachment; filename=users_" + currentDateTime + ".xlsx");
+        headers.add(CONTENT_DISPOSITION, "attachment; filename=users_" + currentDateTime + ".pdf");
 
-        return ResponseEntity.ok().headers(headers).body(excelExporter.export());
+        return ResponseEntity.ok().headers(headers).body(userExcelExporter.export());
     }
 
     @GetMapping("/export-csv")
@@ -97,29 +93,31 @@ public class UserController {
             required = true,
             paramType = "header")
     public void exportCSV(HttpServletResponse response) throws Exception {
-        String currentDateTime= new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
+        String currentDateTime = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
         var fileName = "users_" + currentDateTime + ".csv";
         response.setContentType("text/csv");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=" + fileName);
         userCsvExporter.export(response.getWriter());
     }
+
     @Autowired
     UsersService usersService;
+
     @PostMapping("/import-csv")
     public ResponseEntity<String> addClassifierListFromCsv(@RequestParam("file") MultipartFile file) {
         log.debug("REST request to create a Custom Classifier list");
-        if (file.isEmpty()){
+        if (file.isEmpty()) {
             return ResponseEntity.badRequest().body(null);
-        }else {
+        } else {
             userRepository.saveAll(usersService.getUsersFromCsvFile(file));
             return ResponseEntity.ok().body("imported");
         }
     }
-    @PutMapping
 
+    @PutMapping
     public ResponseEntity<String> updateUser(@RequestBody Users user) {
-        if (userRepository.existsById(user.getId())) {
+        if (userRepository.existsById(Long.valueOf(user.getId()))) {
             userRepository.save(user);
             return new ResponseEntity<>("updated", HttpStatus.ACCEPTED);
         }
@@ -127,12 +125,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Users getUserById(@PathVariable("id") Integer id) {
+    public Users getUserById(@PathVariable("id") Long id) {
         return userRepository.findById(id).stream().findFirst().get();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUserById(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> deleteUserById(@PathVariable("id") Long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
             return new ResponseEntity<>("deleted", HttpStatus.ACCEPTED);

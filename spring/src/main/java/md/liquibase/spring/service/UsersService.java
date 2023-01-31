@@ -15,19 +15,21 @@ import java.util.List;
 
 @Service
 public class UsersService {
+
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final GeoRepository geoRepository;
     private  final ContactRepository contactRepository;
-
+    public List<Users> listAll(){
+        return userRepository.findAll();
+    }
     public UsersService(UserRepository userRepository, AddressRepository addressRepository, GeoRepository geoRepository, ContactRepository contactRepository) {
         this.userRepository = userRepository;
         this.addressRepository = addressRepository;
         this.geoRepository = geoRepository;
         this.contactRepository = contactRepository;
     }
-
-    public Users findById(Integer id) {
+    public Users findById(Long id) {
         return userRepository.getOne(id);
     }
 
@@ -39,7 +41,7 @@ public class UsersService {
         return userRepository.save(user);
     }
 
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
 
@@ -92,4 +94,6 @@ public class UsersService {
 
             return users;
         }
-    }
+
+
+}
