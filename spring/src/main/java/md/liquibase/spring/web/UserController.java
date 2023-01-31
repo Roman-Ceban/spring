@@ -5,8 +5,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import md.liquibase.spring.configuration.AppProperties;
 import md.liquibase.spring.exportCSV.UserCsvExporter;
 import md.liquibase.spring.exportExcel.UserExcelExporter;
+import md.liquibase.spring.exportpdf.ExportPDF;
 import md.liquibase.spring.model.Users;
 import md.liquibase.spring.repository.UserRepository;
+import md.liquibase.spring.service.Exporter;
 import md.liquibase.spring.service.UserExportService;
 import md.liquibase.spring.service.UsersService;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -21,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -113,6 +118,18 @@ public class UserController {
             userRepository.saveAll(usersService.getUsersFromCsvFile(file));
             return ResponseEntity.ok().body("imported");
         }
+    }
+    @GetMapping(
+            value = "/pdf",
+            produces = MediaType.APPLICATION_PDF_VALUE
+    )
+    public void employeeDetailsReport(HttpServletResponse response) throws IOException {
+
+        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+        String fileType = "attachment; filename=employee_details_" + dateFormat.format(new Date()) + ".pdf";
+        response.setHeader("Content-Disposition", fileType);
+
+        ExportPDF.PDFGeneratorUtility.employeeDetailReport(response,userRepository.findAll());
     }
 
     @PutMapping
