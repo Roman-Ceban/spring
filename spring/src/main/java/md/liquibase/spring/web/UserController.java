@@ -122,7 +122,7 @@ public class UserController {
     @GetMapping(value = "/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
         public void usersDetailReport(HttpServletResponse response) throws IOException {
         DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
-        String fileType = "attachment; filename=employee_details_" + dateFormat.format(new Date()) + ".pdf";
+        String fileType = "attachment; filename=Export_users" + dateFormat.format(new Date()) + ".pdf";
         response.setHeader("Content-Disposition", fileType);
         ExportPDF.PDFGeneratorUtility.usersDetailReport(response,userRepository.findAll());
     }

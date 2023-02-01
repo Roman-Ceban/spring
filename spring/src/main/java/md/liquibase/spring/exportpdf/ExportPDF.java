@@ -28,7 +28,7 @@ public class ExportPDF {
 
             try {
                 document.add(new Paragraph("Export users PDF").setBold().setPaddingLeft(200f));
-                Table table = new Table(UnitValue.createPercentArray(new float[]{1f, 2f, 5f, 5f, 5f, 5f, 2f, 2f, 5f, 5f, 5f, 5f}));
+                Table table = new Table(UnitValue.createPercentArray(new float[]{1f, 2f, 3f, 3f, 3f, 5f, 2f, 2f, 5f, 5f, 5f, 5f, 5f}));
                 table.setWidth(UnitValue.createPercentValue(100))
                         .setPadding(0)
                         .setFontSize(9);
@@ -37,6 +37,7 @@ public class ExportPDF {
                 cell1.setTextAlignment(TextAlignment.CENTER);
                 table.addCell(new Cell().add("ID").setBold());
                 table.addCell(new Cell().add("Name").setBold());
+                table.addCell(new Cell().add("Username").setBold());
                 table.addCell(new Cell().add("Phone").setBold());
                 table.addCell(new Cell().add("Email").setBold());
                 table.addCell(new Cell().add("Website").setBold());
@@ -51,6 +52,7 @@ public class ExportPDF {
                 users.forEach(users1 -> {
                     table.addCell(new Cell().add(String.valueOf(users1.getId())));
                     table.addCell(new Cell().add(String.valueOf(users1.getName())));
+                    table.addCell(new Cell().add(String.valueOf(users1.getUsername())));
                     table.addCell(new Cell().add(String.valueOf(users1.getPhone())));
                     table.addCell(new Cell().add(String.valueOf(users1.getEmail())));
                     table.addCell(new Cell().add(String.valueOf(users1.getWebsite())));
