@@ -119,17 +119,12 @@ public class UserController {
             return ResponseEntity.ok().body("imported");
         }
     }
-    @GetMapping(
-            value = "/pdf",
-            produces = MediaType.APPLICATION_PDF_VALUE
-    )
-    public void employeeDetailsReport(HttpServletResponse response) throws IOException {
-
+    @GetMapping(value = "/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+        public void usersDetailReport(HttpServletResponse response) throws IOException {
         DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
         String fileType = "attachment; filename=employee_details_" + dateFormat.format(new Date()) + ".pdf";
         response.setHeader("Content-Disposition", fileType);
-
-        ExportPDF.PDFGeneratorUtility.employeeDetailReport(response,userRepository.findAll());
+        ExportPDF.PDFGeneratorUtility.usersDetailReport(response,userRepository.findAll());
     }
 
     @PutMapping
