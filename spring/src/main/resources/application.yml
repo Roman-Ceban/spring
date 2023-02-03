@@ -17,6 +17,12 @@ spring:
       ddl-auto: none
   liquibase:
     enabled: true
+minio:
+  secure: false
+  bucket-name: test
+  url: minio
+  accessKey: access_key
+  secretKey: secret_key
 
 users:
   uri: http://jsonplaceholder.typicode.com/users

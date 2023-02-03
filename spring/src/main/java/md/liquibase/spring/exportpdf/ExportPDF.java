@@ -28,7 +28,7 @@ public class ExportPDF {
 
             try {
                 document.add(new Paragraph("Export users PDF").setBold().setPaddingLeft(200f));
-                Table table = new Table(UnitValue.createPercentArray(new float[]{1f, 2f, 3f, 3f, 3f, 5f, 2f, 2f, 5f, 5f, 5f, 5f, 5f}));
+                Table table = new Table(UnitValue.createPercentArray(new float[]{1f, 2f, 3f, 3f, 3f, 5f, 2f, 2f, 5f, 5f, 5f,5f,  5f}));
                 table.setWidth(UnitValue.createPercentValue(100))
                         .setPadding(0)
                         .setFontSize(9);

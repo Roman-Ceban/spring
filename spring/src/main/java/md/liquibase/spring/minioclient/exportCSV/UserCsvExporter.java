@@ -1,4 +1,4 @@
-package md.liquibase.spring.exportCSV;
+package md.liquibase.spring.minioclient.exportCSV;
 
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.StatefulBeanToCsv;

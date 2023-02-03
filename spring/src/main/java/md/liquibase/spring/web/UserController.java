@@ -3,14 +3,14 @@ package md.liquibase.spring.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiImplicitParam;
 import md.liquibase.spring.configuration.AppProperties;
-import md.liquibase.spring.exportCSV.UserCsvExporter;
+import md.liquibase.spring.minioclient.exportCSV.UserCsvExporter;
 import md.liquibase.spring.exportExcel.UserExcelExporter;
 import md.liquibase.spring.exportpdf.ExportPDF;
 import md.liquibase.spring.model.Users;
 import md.liquibase.spring.repository.UserRepository;
-import md.liquibase.spring.service.Exporter;
 import md.liquibase.spring.service.UserExportService;
 import md.liquibase.spring.service.UsersService;
+import org.apache.commons.compress.utils.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +18,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.web.servlet.HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE;
 
 @RestController
 @RequestMapping("/users")
@@ -44,7 +46,6 @@ public class UserController {
     private final AppProperties appProperties;
     private final UserExportService userExportService;
     private final UserCsvExporter userCsvExporter;
-
     public UserController(ObjectMapper objectMapper,
                           UserRepository userRepository,
                           UsersService userService,
@@ -150,6 +151,18 @@ public class UserController {
         return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
     }
 
+//    @PostMapping("/upload-to-minio")
+//    public ResponseEntity<Object> uploadFile(@ModelAttribute MultipartFile file) {
+//
+//        return ResponseEntity.ok("Ok");
+//    }
+
+    @GetMapping("upload-to-minio")
+    public ResponseEntity<Object> getFile(HttpServletRequest request) throws IOException {
+        String pattern = (String) request.getAttribute(BEST_MATCHING_PATTERN_ATTRIBUTE);
+        String filename = new AntPathMatcher().extractPathWithinPattern(pattern, request.getServletPath());
+        return ResponseEntity.ok("Ok");
+    }
 }
 
 
