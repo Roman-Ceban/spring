@@ -13,9 +13,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>liquibase-demo</name>
 	<description>Demo project for Spring Boot liquibase</description>
-
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
+		<jib.username>jeta32</jib.username>
+		<jib.password>kaka-1984</jib.password>
 	</properties>
 
 	<dependencies>
@@ -82,4 +83,40 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.2.1</version>
+				<configuration>
+					<from>
+						<image>openjdk:17</image>
+						<auth>
+							<username>${jib.username}</username>
+							<password>${jib.password}</password>
+						</auth>
+					</from>
+					<to>
+						<image>jeta32/md:tagname</image>
+						<auth>
+							<username>${jib.username}</username>
+							<password>${jib.password}</password>
+						</auth>
+					</to>
+					<container>
+						<ports>
+							<port>8080</port>
+						</ports>
+					</container>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
 </project>

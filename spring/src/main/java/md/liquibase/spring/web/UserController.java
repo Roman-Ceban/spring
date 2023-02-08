@@ -21,10 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +34,6 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 @RequestMapping("/users")
 public class UserController {
     Logger log = LoggerFactory.getLogger(UserController.class);
-    private final UsersService userService;
     private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
     private final AppProperties appProperties;
@@ -52,14 +48,14 @@ public class UserController {
                           UserCsvExporter userCsvExporter) {
         this.objectMapper = objectMapper;
         this.userRepository = userRepository;
-        this.userService = userService;
         this.appProperties = appProperties;
         this.userExportService = userExportService;
         this.userCsvExporter = userCsvExporter;
 
     }
 
-    private ResponseEntity<Void> getUser() {
+    @GetMapping("/populate")
+    private ResponseEntity<Void> getUsers() {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Object[]> response = restTemplate.getForEntity(appProperties.getUri(), Object[].class);
         List<Users> users = Arrays.stream(response.getBody())
@@ -70,20 +66,16 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @Autowired
-    UsersService usersService;
-
     @PostMapping
     public ResponseEntity<Users> addUser(@RequestBody Users user) {
         return new ResponseEntity<>(userRepository.save(user), HttpStatus.CREATED);
     }
 
+
     @GetMapping
     public List<Users> getAllUsers() {
         log.debug("GET request all users.");
-        List<Users> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
-        return users;
+        return userRepository.findAll();
 
     }
 
@@ -110,28 +102,20 @@ public class UserController {
                 "attachment; filename=" + fileName);
         userCsvExporter.export(response.getWriter());
     }
+    @Autowired
+    UsersService usersService;
     @PostMapping("/import-csv")
-    public ResponseEntity<Void> addClassifierListFromCsv(@RequestParam("file") MultipartFile file) {
-      Path path = Paths.get("C:\\Users\\User\\Downloads\\spring\\users.csv");
-//        String name = "users.csv";
-//        String originalFileName = "users.csv";
-//        String contentType = "text/csv";
-//        byte[] content = null;
-//        try {
-//            content = Files.readAllBytes(path);
-//        } catch (final IOException e) {
-//        }
-//        MultipartFile file = new MockMultipartFile(name,
-//                originalFileName, contentType, content);
+    public ResponseEntity<String> addClassifierListFromCsv(@RequestParam("file") MultipartFile file) {
         log.debug("REST request to create a Custom Classifier list");
         if (file.isEmpty()){
             return ResponseEntity.badRequest().body(null);
         }else {
-            usersService.createCustomUser(file);
-            return ResponseEntity.ok().body(null);
+            userRepository.saveAll(usersService.getUsersFromCsvFile(file));
+            return ResponseEntity.ok().body("imported");
         }
     }
     @PutMapping
+
     public ResponseEntity<String> updateUser(@RequestBody Users user) {
         if (userRepository.existsById(user.getId())) {
             userRepository.save(user);
