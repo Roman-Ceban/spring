@@ -1,4 +1,4 @@
-package md.liquibase.spring.minioclient.exportCSV;
+package md.liquibase.spring.exportCSV;
 
 import com.opencsv.bean.BeanField;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
