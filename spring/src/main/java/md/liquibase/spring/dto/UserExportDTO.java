@@ -38,7 +38,23 @@ public class UserExportDTO {
     @CsvBindByName(column = "website")
     private String website;
 
-    public UserExportDTO(String name, String username, String email, String street, String suite, String city, String zipcode, String lat, String lng, String phone, String website) {
+    @CsvBindByPosition(position = 11)
+    @CsvBindByName(column = "name")
+    private String companyName;
+
+    @CsvBindByPosition(position = 12)
+    @CsvBindByName(column = "bs")
+    private String companyBs;
+
+
+    @CsvBindByPosition(position = 13)
+    @CsvBindByName(column = "catchPhrase")
+    private String companyCatch;
+
+
+    public UserExportDTO(String name, String username, String email, String street, String suite, String city,
+                         String zipcode, String lat, String lng, String phone, String website, String companyName,
+                         String companyBs, String companyCatch) {
         this.name = name;
         this.username = username;
         this.email = email;
@@ -50,6 +66,33 @@ public class UserExportDTO {
         this.lng = lng;
         this.phone = phone;
         this.website = website;
+        this.companyName = companyName;
+        this.companyBs = companyBs;
+        this.companyCatch = companyCatch;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyBs() {
+        return companyBs;
+    }
+
+    public void setCompanyBs(String companyBs) {
+        this.companyBs = companyBs;
+    }
+
+    public String getCompanyCatch() {
+        return companyCatch;
+    }
+
+    public void setCompanyCatch(String companyCatch) {
+        this.companyCatch = companyCatch;
     }
 
     public UserExportDTO() {

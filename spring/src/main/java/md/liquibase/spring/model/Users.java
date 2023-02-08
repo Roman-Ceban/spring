@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String name;
     private String username;
     private String email;
@@ -20,6 +20,7 @@ public class Users {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     private Company company;
+
 
     public Users(String name, String username, String email, Address address, String phone, String website,
                  Company company) {
@@ -35,19 +36,18 @@ public class Users {
     public Users() {
     }
 
-    public Users(String s, String s1, String s2, String s3, String s4) {
+    public Users(String s, String s1, String s2) {
         this.name = s;
         this.username = s1;
         this.email = s2;
-        this.phone = s3;
-        this.website = s4;
+
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -12,6 +12,23 @@ public class Company {
     private String catchPhrase;
     private String bs;
 
+    public Company(Long id, String name, String catchPhrase, String bs) {
+        this.id = id;
+        this.name = name;
+        this.catchPhrase = catchPhrase;
+        this.bs = bs;
+    }
+
+    public Company(){
+
+    }
+
+    public Company(String name, String catchPhrase, String bs) {
+        this.name = name;
+        this.catchPhrase = catchPhrase;
+        this.bs = bs;
+    }
+
     public String getName() {
         return name;
     }

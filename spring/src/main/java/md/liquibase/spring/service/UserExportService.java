@@ -27,10 +27,13 @@ public class UserExportService {
                         user.getAddress().getSuite(),
                         user.getAddress().getCity(),
                         user.getAddress().getZipcode(),
-                        user.getAddress().getLat().toString(),
-                        user.getAddress().getLong().toString(),
+                        user.getAddress().getGeo().getLat().toString(),
+                        user.getAddress().getGeo().getLng().toString(),
                         user.getPhone(),
-                        user.getWebsite()
+                        user.getWebsite(),
+                        user.getCompany().getName(),
+                        user.getCompany().getBs(),
+                        user.getCompany().getCatchPhrase()
                 )));
         return userExportDTOList;
     }
