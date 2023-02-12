@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="05" author="address">
+    <changeSet id="02" author="address">
         <createTable tableName="address"
                      remarks="A table to contain all the address">
             <column name="id" type="int" autoIncrement="true">

@@ -5,16 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="06" author="geo">
+    <changeSet id="06" author="role_table">
         <createTable tableName="role_table"
                      remarks="A table to contain all the role_table">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="true" primaryKey="true"/>
+                <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="name" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
-
         </createTable>
     </changeSet>
 </databaseChangeLog>

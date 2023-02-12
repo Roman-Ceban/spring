@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiImplicitParam;
 import md.liquibase.spring.configuration.AppProperties;
 import md.liquibase.spring.exportCSV.UserCsvExporter;
-import md.liquibase.spring.exportpdf.exportExcel.UserExcelExporter;
+import md.liquibase.spring.exportExcel.UserExcelExporter;
 import md.liquibase.spring.exportpdf.ExportPDF;
 import md.liquibase.spring.model.Users;
 import md.liquibase.spring.repository.UserRepository;
