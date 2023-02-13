@@ -11,7 +11,7 @@ databaseChangeLog:
       file: db/changelog/role_table.xml
   - include:
       file: db/changelog/user_table.xml
-  - include:
-      file: db/changelog/role_user_id.xml
+#  - include:
+#      file: db/changelog/role_user_id.xml
 
 

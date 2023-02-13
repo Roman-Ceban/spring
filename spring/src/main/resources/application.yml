@@ -8,6 +8,9 @@ spring:
   h2:
     console:
       enabled: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   jpa:
     properties:
       hibernate:

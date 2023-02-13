@@ -17,9 +17,9 @@
             <column name="password" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
-<!--            <column name="role_id" type="int">-->
-<!--                <constraints nullable="false" foreignKeyName="user_table_role_id"/>-->
-<!--            </column>-->
+            <column name="role_id" type="int">
+                <constraints nullable="true" foreignKeyName="user_table_role_id"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

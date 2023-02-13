@@ -1,7 +1,6 @@
 package md.liquibase.spring.swagger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.*;
@@ -14,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-public class SwaggerConfig {
+public class SpringFoxConfig {
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
     @Bean
@@ -50,7 +49,7 @@ public class SwaggerConfig {
                 "Some custom description of API.",
                 "1.0",
                 "Terms of service",
-                new Contact("Ion Gatman", "www.utm.md", "ion.gatman1@isa.utm.md"),
+                new Contact("Ceban Roman", "www.gmail.com", "xayshondet18@gmail.com"),
                 "License of API",
                 "API license URL",
                 Collections.emptyList());
